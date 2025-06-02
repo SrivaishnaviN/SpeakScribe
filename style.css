@@ -1,0 +1,346 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Default animated gradient for home page body */
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientHomePageAnimation 15s ease infinite;
+    color: #333;
+    margin: 0;
+    /* display: flex, justify-content, align-items removed from global body for more specific control */
+    min-height: 100vh;
+    padding-top: 60px; /* Space for fixed navbar, only affects homepage due to specificity */
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes gradientHomePageAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Styles specific to the welcome page body */
+.welcome-page-body {
+    /* Static gradient for welcome page */
+    background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    display: flex; /* Re-apply flex for centering welcome content */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Original padding for welcome content */
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    animation: none; /* Disable home page body animation */
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: rgba(44, 62, 80, 0.9); /* Dark, slightly transparent */
+    padding: 12px 30px; /* Adjusted padding */
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* High z-index */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px; /* Fixed height */
+    box-sizing: border-box;
+}
+
+.navbar-brand {
+    font-size: 1.7em; /* Adjusted size */
+    font-weight: bold;
+}
+
+/* Styles for the main container on index.html (Home Page) */
+.container {
+    background-color: #b3e0ed;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    /* text-align: center; Retained for text content within child elements if not flex items themselves */
+    width: 90%;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 0.3s forwards;
+    margin-bottom: 20px;
+
+    /* Flexbox to center direct children */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Horizontally center all direct children */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); } /* Subtle translateY */
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.title {
+    font-size: 2.2em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center; /* Explicitly center title text */
+}
+
+.speech-controls {
+    margin-bottom: 30px;
+    /* Make speech-controls a flex container to center its children */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ensure it takes available width to center its content within container's flow */
+}
+
+.mic-button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    width: 70px;
+    height: 70px;
+    font-size: 1.8em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin: 0 auto 20px auto; /* Replaced by parent flex centering */
+    margin-bottom: 20px; /* Keep bottom margin */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease-out, transform 0.15s ease-out;
+}
+
+.mic-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-1px); /* Subtle lift effect */
+    box-shadow: 0 3px 7px rgba(0,0,0,0.2);
+}
+
+.mic-button.listening {
+    background-color: #dc3545; /* Professional red for listening */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Consistent shadow */
+    /* Removed pulseMic animation */
+}
+
+.status-text {
+    font-size: 1em;
+    color: #555555;
+    min-height: 22px;
+    margin-bottom: 25px;
+    text-align: center; /* Explicitly center status text */
+}
+
+.language-selector-container {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%; /* Ensure it can center its content properly within the parent flex flow */
+}
+
+.language-selector-container label {
+    font-size: 0.95em; /* Slightly adjusted size */
+    color: #454545; /* Darker label color */
+}
+
+#languageSelector {
+    padding: 10px 12px;
+    border-radius: 6px; /* Consistent rounded corners */
+    border: 1px solid #ced4da; /* Standard input border color */
+    background-color: #ffffff;
+    color: #333333;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#languageSelector:hover {
+    border-color: #007bff; /* Accent color on hover */
+}
+
+#languageSelector:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Standard focus glow */
+}
+
+.transcribed-text {
+    width: calc(100% - 32px); /* Adjusted for padding, effectively full width for its content */
+    /* max-width: 100%; If it shouldn't exceed container padding boundaries */
+    min-height: 150px;
+    background-color: #d0edf7;
+    border: 1px solid #686e74;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 1em;
+    color: #333333;
+    margin-bottom: 30px;
+    resize: vertical;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    /* Centering handled by parent (.container) align-items: center */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    width: 100%; /* Ensure it can center its content properly */
+}
+
+.action-button {
+    background-color: #6c757d; /* Professional grey for secondary actions */
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px; /* Adjusted padding */
+    border-radius: 6px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-button:hover {
+    background-color: #5a6268; /* Darker grey on hover */
+    transform: translateY(-1px);
+}
+
+.action-button i {
+    font-size: 1.1em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 20px;
+    }
+    .title {
+        font-size: 2.2em;
+    }
+    .mic-button {
+        width: 80px;
+        height: 80px;
+        font-size: 2em;
+    }
+    .language-selector-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .transcribed-text {
+        min-height: 120px;
+    }
+    .action-buttons {
+        gap: 10px;
+    }
+    .action-button {
+        padding: 10px 15px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.8em;
+    }
+    .mic-button {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8em;
+    }
+    .transcribed-text {
+        font-size: 0.9em;
+    }
+    .action-buttons {
+        flex-direction: column;
+    }
+    .action-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Styles for the Welcome Page (adapted from old Splash Screen) */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(220, 238, 245, 0.7); /* Semi-transparent white card for welcome content */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.splash-logo {
+    font-size: 5em;
+    color: #3a7bd5; /* Blue, good on light semi-transparent white */
+    margin-bottom: 25px;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: fadeInScaleUpLogo 1.2s ease-out 0.3s forwards;
+}
+
+.splash-title {
+    font-size: 3.8em;
+    color: #2c3e50; /* Dark color for readability */
+    opacity: 0;
+    transform: scale(0.9);
+    animation: fadeInScaleUpTitle 1.2s ease-out 0.7s forwards;
+    margin-bottom: 40px;
+}
+
+.enter-button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    opacity: 0; /* Start hidden */
+    animation: fadeInButton 1s ease-out 1.5s forwards; /* Appear after title */
+}
+
+.enter-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+@keyframes fadeInScaleUpLogo {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInScaleUpTitle {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInButton {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Removed @keyframes gradientFlow and @keyframes fadeOutSplashScreen as they are no longer used */
+/* Also removed .splash-screen related animations for fadeOut and gradientFlow */
+
+/* Ensure splash screen specific styles like background and full-screen animations are not affecting other elements inadvertently */
+/* The .splash-screen class itself and its specific animations like fadeOutSplashScreen and gradientFlow are removed or repurposed. */ 

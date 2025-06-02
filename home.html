@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeakScribe - App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">SpeakScribe</div>
+    </nav>
+    <div class="container">
+        <h1 class="title">SpeakScribe</h1>
+
+        <div class="speech-controls">
+            <button id="micButton" class="mic-button">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <p id="statusText" class="status-text">Click the mic to start</p>
+        </div>
+
+        <div class="language-selector-container">
+            <label for="languageSelector">Select Language:</label>
+            <select id="languageSelector">
+                <option value="en-US">English (US)</option>
+                <option value="hi-IN">Hindi (India)</option>
+                <option value="te-IN">Telugu (India)</option>
+                <option value="bn-IN">Bengali (India)</option>
+                <option value="ta-IN">Tamil (India)</option>
+                <option value="mr-IN">Marathi (India)</option>
+                <option value="gu-IN">Gujarati (India)</option>
+                <option value="kn-IN">Kannada (India)</option>
+                <option value="ml-IN">Malayalam (India)</option>
+                <option value="pa-IN">Punjabi (India)</option>
+                <option value="ur-IN">Urdu (India)</option>
+            </select>
+        </div>
+
+        <textarea id="transcribedText" class="transcribed-text" placeholder="Transcribed text will appear here..." readonly></textarea>
+
+        <div class="action-buttons">
+            <button id="copyButton" class="action-button">
+                <i class="fas fa-copy"></i> Copy to Clipboard
+            </button>
+            <button id="downloadButton" class="action-button">
+                <i class="fas fa-download"></i> Download .txt
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
