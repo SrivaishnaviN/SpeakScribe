@@ -24,11 +24,3 @@ Try it live here: [https://speakscribe.netlify.app/](https://speakscribe.netlify
 - OpenAI API key
 - NiceGUI library
 
----
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/chapig/speakscribe.git
-   cd speakscribe
