@@ -10,10 +10,22 @@
 <body>
     <nav class="navbar">
         <div class="navbar-brand">SpeakScribe</div>
+        <div class="navbar-controls">
+            <button id="clearMemoryButton" class="nav-button" title="Clear Chat Memory">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
     </nav>
     <div class="container">
         <h1 class="title">SpeakScribe</h1>
 
+        <div class="feature-tabs">
+            <button class="tab-button active" data-tab="realtime">Real-time Speech</button>
+            <button class="tab-button" data-tab="file">File Upload</button>
+            <button class="tab-button" data-tab="chat">AI Chat</button>
+        </div>
+
+        <div class="tab-content active" id="realtime-tab">
         <div class="speech-controls">
             <button id="micButton" class="mic-button">
                 <i class="fas fa-microphone"></i>
@@ -36,6 +48,34 @@
                 <option value="pa-IN">Punjabi (India)</option>
                 <option value="ur-IN">Urdu (India)</option>
             </select>
+            </div>
+        </div>
+
+        <div class="tab-content" id="file-tab">
+            <div class="file-upload-container">
+                <div class="file-drop-zone" id="fileDropZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & Drop audio/video files here</p>
+                    <p>or</p>
+                    <input type="file" id="fileInput" accept="audio/*,video/*" hidden>
+                    <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div class="file-info" id="fileInfo"></div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="chat-tab">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Type your message..." class="chat-input">
+                    <button id="sendMessageButton" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <textarea id="transcribedText" class="transcribed-text" placeholder="Transcribed text will appear here..." readonly></textarea>
