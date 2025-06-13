@@ -1,6 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM Content Loaded. Initializing script.");
 
+    // Tab Management
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            
+            // Update active states
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            button.classList.add('active');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
+
+    // Existing speech recognition code
     const micButton = document.getElementById('micButton');
     const statusText = document.getElementById('statusText');
     const transcribedText = document.getElementById('transcribedText');
@@ -219,5 +237,213 @@ document.addEventListener('DOMContentLoaded', () => {
             downloadButton.innerHTML = '<i class="fas fa-download"></i> Download .txt';
         }, 2000);
     });
+
+    // File Upload Handling
+    const fileDropZone = document.getElementById('fileDropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileDropZone.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    // Highlight drop zone when item is dragged over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        fileDropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        fileDropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    // Handle dropped files
+    fileDropZone.addEventListener('drop', handleDrop, false);
+    fileInput.addEventListener('change', handleFileSelect, false);
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function highlight(e) {
+        fileDropZone.classList.add('highlight');
+    }
+
+    function unhighlight(e) {
+        fileDropZone.classList.remove('highlight');
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    function handleFileSelect(e) {
+        const files = e.target.files;
+        handleFiles(files);
+    }
+
+    function handleFiles(files) {
+        if (files.length > 0) {
+            const file = files[0];
+            if (file.type.startsWith('audio/') || file.type.startsWith('video/')) {
+                displayFileInfo(file);
+                processFile(file);
+            } else {
+                alert('Please upload an audio or video file.');
+            }
+        }
+    }
+
+    function displayFileInfo(file) {
+        fileInfo.innerHTML = `
+            <p><strong>File:</strong> ${file.name}</p>
+            <p><strong>Size:</strong> ${formatFileSize(file.size)}</p>
+            <p><strong>Type:</strong> ${file.type}</p>
+        `;
+        fileInfo.classList.add('active');
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    async function processFile(file) {
+        try {
+            statusText.textContent = 'Processing file...';
+            // Here you would implement the actual file processing logic
+            // For now, we'll just simulate a delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            statusText.textContent = 'File processed successfully';
+        } catch (error) {
+            console.error('Error processing file:', error);
+            statusText.textContent = 'Error processing file';
+        }
+    }
+
+    // Chat Interface
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendMessageButton = document.getElementById('sendMessageButton');
+    const clearMemoryButton = document.getElementById('clearMemoryButton');
+
+    let chatHistory = [];
+
+    // Define related topics and their responses
+    const relatedTopics = {
+        transcription: {
+            keywords: ['transcribe', 'transcription', 'speech to text', 'voice to text', 'audio to text', 'video to text'],
+            responses: [
+                "I can help you with transcription! You can either use real-time speech recognition or upload audio/video files.",
+                "For transcription, you can use the microphone button for real-time speech or upload files in the File Upload tab.",
+                "Our transcription supports multiple languages including English, Hindi, Telugu, and more!"
+            ]
+        },
+        languages: {
+            keywords: ['language', 'languages', 'hindi', 'telugu', 'bengali', 'tamil', 'marathi', 'gujarati', 'kannada', 'malayalam', 'punjabi', 'urdu'],
+            responses: [
+                "We support multiple Indian languages including Hindi, Telugu, Bengali, Tamil, Marathi, Gujarati, Kannada, Malayalam, Punjabi, and Urdu.",
+                "You can select your preferred language from the dropdown menu in the Real-time Speech tab.",
+                "All our transcription features work with the supported languages!"
+            ]
+        },
+        fileUpload: {
+            keywords: ['upload', 'file', 'audio', 'video', 'mp3', 'mp4', 'wav', 'avi'],
+            responses: [
+                "You can upload audio or video files by dragging and dropping them into the File Upload tab or using the Choose File button.",
+                "We support various audio and video formats. Just go to the File Upload tab to get started!",
+                "After uploading, your file will be processed and transcribed automatically."
+            ]
+        },
+        help: {
+            keywords: ['help', 'how to', 'how do i', 'what is', 'how does', 'guide', 'tutorial'],
+            responses: [
+                "I can help you with transcription, language selection, and file uploads. What would you like to know?",
+                "You can use real-time speech recognition, upload files, or ask me questions about our features!",
+                "Need help? Just ask about transcription, languages, or file uploads!"
+            ]
+        }
+    };
+
+    function getRandomResponse(responses) {
+        return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    function isRelatedQuestion(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        for (const topic in relatedTopics) {
+            if (relatedTopics[topic].keywords.some(keyword => lowerMessage.includes(keyword))) {
+                return {
+                    isRelated: true,
+                    topic: topic
+                };
+            }
+        }
+        
+        return {
+            isRelated: false
+        };
+    }
+
+    function addMessage(message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+        messageDiv.textContent = message;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        if (isUser) {
+            chatHistory.push({ role: 'user', content: message });
+        } else {
+            chatHistory.push({ role: 'assistant', content: message });
+        }
+    }
+
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+            addMessage(message, true);
+            chatInput.value = '';
+
+            try {
+                const { isRelated, topic } = isRelatedQuestion(message);
+                
+                if (isRelated) {
+                    const response = getRandomResponse(relatedTopics[topic].responses);
+                    addMessage(response);
+                } else {
+                    addMessage("I'm sorry, but I can only help with questions related to transcription, languages, file uploads, and general help. Please ask something related to these topics.");
+                }
+            } catch (error) {
+                console.error('Error processing message:', error);
+                addMessage('Sorry, there was an error processing your message.');
+            }
+        }
+    }
+
+    sendMessageButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    clearMemoryButton.addEventListener('click', () => {
+        chatHistory = [];
+        chatMessages.innerHTML = '';
+        addMessage('Chat history cleared. How can I help you with transcription today?');
+    });
+
+    // Add initial greeting
+    addMessage('Hello! I can help you with transcription, language selection, and file uploads. What would you like to know?');
+
     console.log("Event listeners for buttons and selector attached.");
 });
